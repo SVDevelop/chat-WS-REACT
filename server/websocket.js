@@ -1,3 +1,5 @@
+import WebSock from "../client/src/WebSock";
+
 const ws = require('ws')
 
 const PORT = 5000
@@ -22,6 +24,8 @@ wss.on('connection', function connection (ws) {
 
 function broadcastMessage (message) {
     wss.clients.forEach(client => {
-        client.send(JSON.stringify(message))
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(message))
+        }
     })
 }

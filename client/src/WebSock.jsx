@@ -24,7 +24,7 @@ const WebSock = () => {
             const message = JSON.parse(event.data)
             setMessages(prev => [message, ...prev])
         }
-        socket.current.onclose= () => {
+        socket.current.onclose = () => {
             console.log('Socket закрыт')
         }
         socket.current.onerror = () => {
@@ -60,11 +60,22 @@ const WebSock = () => {
     }
 
 
+    function keyUpendler ({key}) {
+        switch (key) {
+            case 'Enter': {
+                sendMessage()
+            }
+            default:
+                return
+        }
+    }
+
     return (
         <div className="center">
+            <Header status={connected} />
             <div>
                 <div className="form">
-                    <input value={value} onChange={e => setValue(e.target.value)} type="text"/>
+                    <input value={value} onChange={e => setValue(e.target.value)} onKeyUp={keyUpendler} type="text"/>
                     <button onClick={sendMessage}>Отправить</button>
                 </div>
                 <div className="messages">
@@ -87,3 +98,25 @@ const WebSock = () => {
 };
 
 export default WebSock;
+
+
+// {
+//
+//         <main>
+//             <ul id="messages"></ul>
+//
+//             <form id="form">
+//                 <label for="message">&gt;</label>
+//                 <input type="text" id="input" required autofocus autocomplete="off">
+//             </form>
+//         </main>
+// }
+
+function Header ({status}) {
+    return (
+        <header>
+            <h1>CHAT</h1>
+            <span id="status">{status ? 'ONLINE' : "DISCONECTED"}</span>
+        </header>
+    )
+}
